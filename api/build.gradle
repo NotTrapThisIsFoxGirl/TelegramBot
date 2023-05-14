@@ -1,0 +1,15 @@
+dependencies {
+    // Логирование
+    implementation "org.apache.logging.log4j:log4j-core:2.17.1"
+
+    // Работа с JSON
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.15.0"
+
+    // Работа с HTTP
+    implementation "com.squareup.okhttp3:okhttp:4.11.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.11.0"
+
+    // Инструменты для упрощения разработки
+    compileOnly "org.projectlombok:lombok:1.18.26"
+    annotationProcessor "org.projectlombok:lombok:1.18.26"
+}

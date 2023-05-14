@@ -1,0 +1,56 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "8.1.1" apply false
+}
+
+version = "0.0.1"
+group = "ru.arcanite.telegrambot"
+
+def mainClass = "${group}.core.TelegramCore"
+def jarName = "${name}.jar"
+def buildDirPath = "buildDir\\${version}"
+
+subprojects {
+    apply plugin: "java"
+    apply plugin: "maven-publish"
+    apply plugin: "com.github.johnrengelman.shadow"
+
+    // Объявление хранилищ для поиска артефактов
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    // Настройка компилятора для задания требуемых параметров компиляции
+    tasks.withType(JavaCompile).configureEach {
+        targetCompatibility = "1.8"
+        sourceCompatibility = "1.8"
+        options.encoding = "UTF-8"
+    }
+
+    // Настройка shadowJar для регулирования параметров сборки теневого jar-файла
+    tasks {
+        shadowJar {
+            exclude("META-INF/DEPENDENCIES")
+            exclude("META-INF/LICENSE")
+            exclude("META-INF/LICENSE.txt")
+            exclude("META-INF/NOTICE")
+            exclude("META-INF/NOTICE.txt")
+            exclude("META-INF/maven/**")
+
+            archiveFileName = jarName
+            destinationDirectory = file(buildDirPath)
+        }
+
+        // Билд (зависит от shadowJar)
+        build {
+            dependsOn("shadowJar")
+        }
+    }
+
+    // Объявление свойств для файла манифеста
+    jar {
+        manifest {
+            attributes "Main-Class": mainClass
+        }
+    }
+}
